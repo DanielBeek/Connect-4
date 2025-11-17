@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ namespace Connect4.Game
         public int Rows { get; }
         public int Columns { get; }
         public int[,] GameBoard { get; set; }
+
+        public GameManager GameManager { get; set; }
 
         public Board(int rows, int columns)
         {
@@ -28,11 +31,22 @@ namespace Connect4.Game
             GameBoard = new int[Rows, Columns];
         }
 
+        /// <summary>
+        /// Updates the int board with <see cref="GameManager.CurrentPlayer"/>
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <param name="currentPlayer"></param>
         public void UpdateBoard(int row, int col, int currentPlayer)
         {
             GameBoard[row, col] = currentPlayer;
         }
 
+
+        /// <summary>
+        /// Checks if the int board is full
+        /// </summary>
+        /// <returns></returns>
         public bool IsBoardFull()
         {
             foreach (var cellValue in GameBoard)
@@ -45,6 +59,11 @@ namespace Connect4.Game
             return true;
         }
 
+        /// <summary>
+        /// Calculates the lowest cell of the given column
+        /// </summary>
+        /// <param name="col"></param>
+        /// <returns></returns>
         public int CalculateLowestCell(int col)
         {
             for (int row = Rows - 1; row >= 0; row--)
@@ -56,5 +75,18 @@ namespace Connect4.Game
             }
             return -1;
         }
+
+        //public void PrintBoard(int[,] board)
+        //{
+        //    for (int row = 0; row < GameManager.Rows; row++)
+        //    {
+        //        string rowString = "";
+        //        for (int column = 0; column < GameManager.Columns; column++)
+        //        {
+        //            rowString += board[row, column] + " ";
+        //        }
+        //        Debug.WriteLine(rowString);
+        //    }
+        //}
     }
 }

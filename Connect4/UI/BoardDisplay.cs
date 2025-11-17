@@ -18,13 +18,9 @@ namespace Connect4.UI
         private readonly Grid _gameGrid;
         private readonly MouseButtonEventHandler _cellHandler;
         private readonly GameManager _gameManager;
-        //public int Rows { get; set; }
-        //public int Columns { get; set; }
-
-        public int CellSize = 100;
-        public double CellMargin { get; set; } = 5;
-
-        //public int CurrentPlayer { get; set; }
+ 
+        public int CellSize = 75;
+        public double CellMargin { get; set; } = 4;
 
         public Border[,] Cells { get; set; }
 
@@ -32,11 +28,7 @@ namespace Connect4.UI
         {
             _gameGrid = gameGrid;
             _cellHandler = cellHandler;
-            //Rows = rows;
-            //Columns = columns;
-            //CurrentPlayer = currentPlayer;
             _gameManager = gameManager;
-
             Cells = new Border[_gameManager.Rows, _gameManager.Columns];
         }
 
@@ -114,6 +106,12 @@ namespace Connect4.UI
             return circle;
         }
 
+        /// <summary>
+        /// Updates the UI with the new placed cell
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <param name="player"></param>
         public void UpdateCellUI(int row, int col, int player)
         {
             var cell = Cells[row, col];
@@ -123,6 +121,9 @@ namespace Connect4.UI
             }
         }
 
+        /// <summary>
+        /// Clears the UI 
+        /// </summary>
         public void ClearGrid()
         {
             _gameGrid.Children.Clear();
