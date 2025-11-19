@@ -34,9 +34,14 @@ namespace Connect4.UI
             _boardMenu.Height = BoardMenuHeigth;
             _boardMenu.HorizontalAlignment = HorizontalAlignment.Stretch;
             _gameModeButton = gamemodebutton;
-            _boardMenu.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            _boardMenu.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            _boardMenu.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+           
+            _boardMenu.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(20) }); // spacing
+            _boardMenu.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // item 1
+            _boardMenu.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // item 2
+            _boardMenu.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }); // space that pushes right side
+            _boardMenu.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // item 3
+            _boardMenu.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(30) }); // right spacing
+
 
             PlayerText();
             CurrentPlayerCircle();
@@ -51,7 +56,7 @@ namespace Connect4.UI
             textblock.Text = "Current player: ";
             textblock.Foreground = Brushes.White;
             textblock.VerticalAlignment = VerticalAlignment.Center;
-            Grid.SetColumn(textblock, 0);
+            Grid.SetColumn(textblock, 1);
             _boardMenu.Children.Add(textblock);
         }
 
@@ -64,7 +69,7 @@ namespace Connect4.UI
                 Height = 40,
                 VerticalAlignment = VerticalAlignment.Center,
             };
-            Grid.SetColumn(_currentPlayerCircle, 1);
+            Grid.SetColumn(_currentPlayerCircle, 2);
             _boardMenu.Children.Add(_currentPlayerCircle);
         }
 
@@ -77,7 +82,7 @@ namespace Connect4.UI
         {
             var button = new Button
             {
-                Content = "Bot",
+                Content = "Player",
                 Width = 100,
                 Height = 25,
                 Background = new SolidColorBrush(Color.FromRgb(61, 59, 60)),
@@ -88,7 +93,7 @@ namespace Connect4.UI
                 OverridesDefaultStyle = true
             };
             button.Click += _gameModeButton;
-            Grid.SetColumn(button, 2);
+            Grid.SetColumn(button, 4);
             _boardMenu.Children.Add(button);
         }
 

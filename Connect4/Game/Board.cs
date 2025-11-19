@@ -64,11 +64,11 @@ namespace Connect4.Game
         /// </summary>
         /// <param name="col"></param>
         /// <returns></returns>
-        public int CalculateLowestCell(int col)
+        public int CalculateLowestCell(int[,] board, int col)
         {
             for (int row = Rows - 1; row >= 0; row--)
             {
-                if (GameBoard[row, col] == 0)
+                if (board[row, col] == 0)
                 {
                     return row;
                 }
@@ -76,17 +76,17 @@ namespace Connect4.Game
             return -1;
         }
 
-        //public void PrintBoard(int[,] board)
-        //{
-        //    for (int row = 0; row < GameManager.Rows; row++)
-        //    {
-        //        string rowString = "";
-        //        for (int column = 0; column < GameManager.Columns; column++)
-        //        {
-        //            rowString += board[row, column] + " ";
-        //        }
-        //        Debug.WriteLine(rowString);
-        //    }
-        //}
+        public void PrintBoard(int[,] board)
+        {
+            for (int row = 0; row < GameManager.Rows; row++)
+            {
+                string rowString = "";
+                for (int column = 0; column < GameManager.Columns; column++)
+                {
+                    rowString += board[row, column] + " ";
+                }
+                Debug.WriteLine(rowString);
+            }
+        }
     }
 }

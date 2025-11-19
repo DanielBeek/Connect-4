@@ -1,15 +1,18 @@
-﻿using Connect4.UI;
+﻿using Connect4.Bot;
+using Connect4.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace Connect4.Game
 {
     public class GameManager
     {
-        public Boolean GameEnded { get; set; } = false;
+        public bool GameEnded { get; set; } = false;
         public int Red { get; } = 1;
 
         public int Yellow { get; } = 2;
@@ -21,6 +24,15 @@ namespace Connect4.Game
 
         public Board Board { get; set; }
         public BoardDisplay BoardDisplay { get; set; }
+
+        //public bool IsBotTurn { get; set; } = false;
+        public bool IsPlayingAgainstBot { get; set; } = false;
+
+        public bool IsProcessingTurn { get; set; } = false;
+
+        public Connect4Bot Connect4Bot { get; set; }
+
+        public BoardMenu BoardMenu { get; set; }
 
         public GameManager()
         {
@@ -45,12 +57,20 @@ namespace Connect4.Game
             BoardDisplay.ClearGrid();
             BoardDisplay.CreateGrid();
             BoardDisplay.FillGrid();
-            SwitchPlayerTurn();
+            CurrentPlayer = Red;
+            BoardMenu.UpdatePlayerCircle();
+            IsProcessingTurn = false;
             GameEnded = false;
         }
 
-        public async Task HandleTurn(int row, int column)
+        public async Task HandleTurn(int row, int column, bool isBotTurn)
         {
+            if (IsProcessingTurn && !isBotTurn)
+            {
+                return;
+            }
+            IsProcessingTurn = true;
+           
             int player = CurrentPlayer;
             Board.UpdateBoard(row, column, player);
             BoardDisplay.UpdateCellUI(row, column, player);
@@ -58,7 +78,6 @@ namespace Connect4.Game
             {
                 GameEnded = true;
             }
-            //PrintBoard(_board.GameBoard);
             CheckAllDirections(Board.GameBoard, row, column);
 
             if (GameEnded)
@@ -67,20 +86,22 @@ namespace Connect4.Game
                 return;
             }
             SwitchPlayerTurn();
-            ////if (CurrentPlayer == Yellow)
-            ////{
-            ////    //await Task.Delay(1);
-            ////    //await RandomColumn();
-            ////    Count = 0;
-            ////    var result = MiniMax(GameBoard, 7, Double.NegativeInfinity, Double.PositiveInfinity, true);
-            ////    Debug.WriteLine(result);
-            ////    row = _board.CalculateLowestCell(result.column);
-            ////    await HandleTurn(row, result.column);
-            ////}
+            BoardMenu.UpdatePlayerCircle();
+            await Task.Delay(100);
+
+            //IsBotTurn = (IsPlayingAgainstBot && CurrentPlayer == Yellow);
+
+            if (IsPlayingAgainstBot == true && CurrentPlayer == Yellow)
+            {
+                var result = Connect4Bot.MiniMax(Board.GameBoard, 7, Double.NegativeInfinity, Double.PositiveInfinity, true);
+                row = Board.CalculateLowestCell(Board.GameBoard, result.column);
+                await HandleTurn(row, result.column, true);
+            }
+            IsProcessingTurn = false;
         }
 
         /// <summary>
-        /// Checks all the directions of the placed cell
+        /// Checks all the directions of the placed cell and check the results
         /// </summary>
         /// <param name="gameBoard"></param>
         /// <param name="row"></param>
@@ -110,6 +131,18 @@ namespace Connect4.Game
             if (!GameEnded && length >= 4)
             {
                 GameEnded = true;
+            }
+        }
+
+        public void SetGameMode(Button button)
+        {
+            if (button.Content.ToString() == "Bot")
+            {
+                IsPlayingAgainstBot = true;
+            }
+            else
+            {
+                IsPlayingAgainstBot = false;
             }
         }
 
