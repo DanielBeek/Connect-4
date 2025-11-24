@@ -104,22 +104,14 @@ namespace Connect4.Bot
                     {
                         continue;
                     }
-                    if (cell == _gameManager.Red)
-                    {
-                        // check directions for Red
-                        score -= EvaluatePosition(_gameManager.CheckHorizontal(board, row, col));
-                        score -= EvaluatePosition(_gameManager.CheckVertical(board, row, col));
-                        score -= EvaluatePosition(_gameManager.CheckPrimaryDiagonal(board, row, col));
-                        score -= EvaluatePosition(_gameManager.CheckSecondaryDiagonal(board, row, col));
-                    }
-                    else if (cell == _gameManager.Yellow)
-                    {
-                        // check directions for Yellow
-                        score += EvaluatePosition(_gameManager.CheckHorizontal(board, row, col));
-                        score += EvaluatePosition(_gameManager.CheckVertical(board, row, col));
-                        score += EvaluatePosition(_gameManager.CheckPrimaryDiagonal(board, row, col));
-                        score += EvaluatePosition(_gameManager.CheckSecondaryDiagonal(board, row, col));
-                    }
+                    int factor = (cell == _gameManager.Yellow) ? 1 : -1;
+
+                    score += factor * (
+                        EvaluatePosition(_gameManager.CheckHorizontal(board, row, col)) +
+                        EvaluatePosition(_gameManager.CheckVertical(board, row, col)) +
+                        EvaluatePosition(_gameManager.CheckPrimaryDiagonal(board, row, col)) +
+                        EvaluatePosition(_gameManager.CheckSecondaryDiagonal(board, row, col))
+                    );
                 }
             }
             return score;

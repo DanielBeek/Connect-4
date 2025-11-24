@@ -12,6 +12,8 @@ namespace Connect4.Game
 {
     public class GameManager
     {
+        public int Depth { get; set; } = 10;
+
         public bool GameEnded { get; set; } = false;
         public int Red { get; } = 1;
 
@@ -25,7 +27,6 @@ namespace Connect4.Game
         public Board Board { get; set; }
         public BoardDisplay BoardDisplay { get; set; }
 
-        //public bool IsBotTurn { get; set; } = false;
         public bool IsPlayingAgainstBot { get; set; } = false;
 
         public bool IsProcessingTurn { get; set; } = false;
@@ -59,6 +60,7 @@ namespace Connect4.Game
             BoardDisplay.FillGrid();
             CurrentPlayer = Red;
             BoardMenu.UpdatePlayerCircle();
+            BoardMenu.UpdateTextBlock("Current player: ");
             IsProcessingTurn = false;
             GameEnded = false;
         }
@@ -82,6 +84,8 @@ namespace Connect4.Game
 
             if (GameEnded)
             {
+                BoardMenu.UpdateTextBlock("Winner: ");
+                await Task.Delay(2000);
                 ResetGame();
                 return;
             }
@@ -93,7 +97,7 @@ namespace Connect4.Game
 
             if (IsPlayingAgainstBot == true && CurrentPlayer == Yellow)
             {
-                var result = Connect4Bot.MiniMax(Board.GameBoard, 7, Double.NegativeInfinity, Double.PositiveInfinity, true);
+                var result = Connect4Bot.MiniMax(Board.GameBoard, Depth, Double.NegativeInfinity, Double.PositiveInfinity, true);
                 row = Board.CalculateLowestCell(Board.GameBoard, result.column);
                 await HandleTurn(row, result.column, true);
             }

@@ -20,6 +20,8 @@ namespace Connect4.UI
 
         private Ellipse _currentPlayerCircle;
 
+        private TextBlock _textBlock;
+
         private readonly Grid _boardMenu;
 
         private readonly GameManager _gameManager;
@@ -51,13 +53,16 @@ namespace Connect4.UI
 
         public void PlayerText()
         {
-            var textblock = new TextBlock();
-            textblock.FontSize = 24;
-            textblock.Text = "Current player: ";
-            textblock.Foreground = Brushes.White;
-            textblock.VerticalAlignment = VerticalAlignment.Center;
-            Grid.SetColumn(textblock, 1);
-            _boardMenu.Children.Add(textblock);
+            _textBlock = new TextBlock
+            {
+                FontSize = 24,
+                Text = "Current player: ",
+                Foreground = Brushes.White,
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+          
+            Grid.SetColumn(_textBlock, 1);
+            _boardMenu.Children.Add(_textBlock);
         }
 
         public void CurrentPlayerCircle()
@@ -76,6 +81,11 @@ namespace Connect4.UI
         public void UpdatePlayerCircle()
         {
             _currentPlayerCircle.Fill = _gameManager.CurrentPlayer == _gameManager.Red ? Brushes.Red : Brushes.Yellow;
+        }
+
+        public void UpdateTextBlock(string text)
+        {
+            _textBlock.Text = text;
         }
 
         public void GameSwitchButton()
